@@ -8,11 +8,11 @@ public class Main {
     static int[] A, B;
     static int T, N, M;
 
-    static int lower_bound(int[] A, int L, int R, int X) {
+    static int lower_bound(int[] arr, int L, int R, int X) {
         int result = L - 1;
         while (L <= R) {
             int mid = (L + R) / 2;
-            if (A[mid] < X) {
+            if (arr[mid] < X) {
                 result = mid;
                 L = mid + 1;
             } else {
@@ -47,11 +47,11 @@ public class Main {
             B = new int[M+1];
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
-                A[i] = Integer.parseInt(st.nextToken());
+                A[j] = Integer.parseInt(st.nextToken());
             }
             st = new StringTokenizer(br.readLine());
-            for (int k = 1; k <= M; k++) {
-                B[i] = Integer.parseInt(st.nextToken());
+            for (int j = 1; j <= M; j++) {
+                B[j] = Integer.parseInt(st.nextToken());
             }
             getAns();
 
