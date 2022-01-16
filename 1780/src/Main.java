@@ -52,12 +52,7 @@ public class Main {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-//        for (int i = 0; i < N; i++) {
-//            for (int j = 0; j < N; j++) {
-//               System.out.print(map[i][j]);
-//            }
-//            System.out.println(" ");
-//        }
+
         divide_conquer(0, 0, N);
         sb.append(ans[2]).append('\n');
         sb.append(ans[0]).append('\n');
