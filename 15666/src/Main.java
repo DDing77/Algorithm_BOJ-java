@@ -27,10 +27,10 @@ public class Main {
 
         for (int i = start; i < N; i++) {
 
-                res[depth] = arr[i];
-                dfs(depth + 1 ,i);
+            res[depth] = arr[i];
+            dfs(depth + 1 ,i);
 
-            }
+        }
 
     }
 
