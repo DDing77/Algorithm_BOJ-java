@@ -1,93 +1,66 @@
 import java.io.*;
 import java.util.*;
+
 public class Main {
-static class info {
-    int from;
-    int to;
-    int time;
-
-    public info(int from, int to, int time) {
-        this.from = from;
-        this.to = to;
-        this.time = time;
+    static int N , max;
+    static int[] time, pretime, indegree;
+    static ArrayList<Integer>[] list;
+    static void solution(StringBuilder sb){
+        Deque<Integer> dq = new LinkedList<>();
+        for(int i=1; i<=N; i++) {
+            if(indegree[i] == 0) {
+                dq.add(i);
+                pretime[i] = time[i];
+            }
+        }
+        while(!dq.isEmpty()) {
+            int X = dq.poll();
+            max = 0;
+            for(int Y : list[X]) {
+                indegree[Y]--;
+                if(indegree[Y] == 0) dq.add(Y);
+                pretime[Y] = Math.max(pretime[Y], pretime[X] + time[Y] );
+            }
+        }
+        for(int i=1; i<=N; i++) {
+            sb.append(pretime[i]).append('\n');
+        }
+        System.out.print(sb);
     }
-}
-
-    static int N, M;
-    static info [] List;
-    static long [] Cost;
-    static final int INF = Integer.MAX_VALUE;
-
-    public static void main(String[] args) throws NumberFormatException, IOException {
-        StringTokenizer st;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        st = new StringTokenizer(br.readLine(), " ");
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-
-        Cost = new long [N + 1];
-        List = new info [M + 1];
-        for(int i = 1 ; i<= N ; i++) {
-            Cost[i] = INF;
+        StringBuilder sb = new StringBuilder();
+        N = Integer.parseInt(br.readLine());
+        list = new ArrayList[N + 1];
+        for(int i=1; i<=N; i++) {
+            list[i] = new ArrayList<>();
         }
 
-        int A, B, C;
-        for(int i = 1 ; i <= M ;i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            A = Integer.parseInt(st.nextToken());
-            B = Integer.parseInt(st.nextToken());
-            C = Integer.parseInt(st.nextToken());
-            List[i] = new info(A, B, C);
-        }
-
-        findShortestPath(1);
-        boolean isNegativeCycle = findNegativeCycle();
-
-        if(isNegativeCycle == true) {
-            bw.write("-1" + "\n");
-            bw.flush();
-            bw.close();
-            return;
-        }
-
-        for(int i = 2 ; i<= N ; i++) {
-            if(Cost[i] == INF) {
-                bw.write("-1" + "\n");
+        time = new int[N + 1];
+        pretime = new int[N+1];
+        indegree = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            String[] str = br.readLine().split(" ");
+            if (str.length == 2) {
+                time[i] = Integer.parseInt(str[0]);
             } else {
-                bw.write(Cost[i] + "\n");
-            }
-        }
-
-        bw.flush();
-        bw.close();
-    }
-
-    private static void findShortestPath(int start) {
-        Cost[start] = 0;
-
-        for(int i = 1 ; i <= N - 1 ; i++) {
-            for(int j = 1 ; j <= M ; j++) {
-                info nowEdge = List[j];
-                if(Cost[nowEdge.from] != INF) {
-                    if(Cost[nowEdge.to] > Cost[nowEdge.from] + nowEdge.time) {
-                        Cost[nowEdge.to] = Cost[nowEdge.from] + nowEdge.time;
-                    }
-                }
-            }
-        }
-    }
-
-    private static boolean findNegativeCycle() {
-        for(int j = 1 ; j <= M ; j++) {
-            info nowEdge = List[j];
-            if(Cost[nowEdge.from] != INF) {
-                if(Cost[nowEdge.to] > Cost[nowEdge.from] + nowEdge.time) {
-                    return true;
+                time[i] = Integer.parseInt(str[0]);
+                for(int j= 1; j<str.length-1; j++){
+                    indegree[i]++;
+                    list[Integer.parseInt(str[j])].add(i);
                 }
             }
         }
 
-        return false;
+        solution(sb);
+//        for(int i=1; i<=N; i++) {
+//            System.out.println(indegree[i]);
+//        }
+//        for(int i=1; i<=N; i++) {
+//            for(int j=0; j<list[i].size(); j++) {
+//                System.out.print(list[i].get(j));
+//            }
+//            System.out.println('\n');
+//        }
     }
 }
