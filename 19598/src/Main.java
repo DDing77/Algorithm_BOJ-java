@@ -13,7 +13,9 @@ public class Main {
             this.end = end;
         }
     }
+
     static CLASS[] classes;
+
     static int solution(){
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         pq.add(classes[0].end);
@@ -27,6 +29,7 @@ public class Main {
         }
         return pq.size();
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
