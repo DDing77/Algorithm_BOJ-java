@@ -131,20 +131,79 @@ import java.util.*;
 //    }
 //}
 
-// 인접 행렬
+//// 인접 행렬
+//public class Main {
+//    static int N, M, V;
+//    static int[][] map;
+//    static boolean[] isVisited;
+//    static StringBuilder sb = new StringBuilder();
+//
+//    static void DFS(int start) {
+//        isVisited[start] = true;
+//        sb.append(start).append(" ");
+//        for (int i = 1; i <= N; i++) {
+//            if (map[start][i] != 1) continue;
+//            if (isVisited[i]) continue;
+//            DFS(i);
+//        }
+//    }
+//
+//    static void BFS(int start) {
+//        Queue<Integer> que = new LinkedList<>();
+//        que.add(start);
+//        isVisited[start] = true;
+//
+//        while (!que.isEmpty()) {
+//            int now = que.poll();
+//            sb.append(now).append(" ");
+//            for (int i = 1; i <= N; i++) {
+//                if (map[now][i] != 1) continue;
+//                if (isVisited[i]) continue;
+//                que.add(i);
+//                isVisited[i] = true;
+//            }
+//        }
+//    }
+//
+//    public static void main(String[] args) throws IOException {
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        StringTokenizer st = new StringTokenizer(br.readLine());
+//        N = Integer.parseInt(st.nextToken());
+//        M = Integer.parseInt(st.nextToken());
+//        V = Integer.parseInt(st.nextToken());
+//
+//        map = new int[N + 1][N + 1];
+//        isVisited = new boolean[N + 1];
+//
+//        for (int i = 0; i < M; i++) {
+//            st = new StringTokenizer(br.readLine());
+//            int start = Integer.parseInt(st.nextToken());
+//            int end = Integer.parseInt(st.nextToken());
+//
+//            map[start][end] = 1;
+//            map[end][start] = 1;
+//        }
+//        DFS(V);
+//        sb.append('\n');
+//        isVisited = new boolean[N + 1];
+//        BFS(V);
+//        System.out.println(sb);
+//    }
+//}
+
+// 인접 리스트
 public class Main {
     static int N, M, V;
-    static int[][] map;
-    static boolean[] isVisited;
+    static ArrayList<Integer>[] edges;
     static StringBuilder sb = new StringBuilder();
+    static boolean[] isVisited;
 
     static void DFS(int start) {
         isVisited[start] = true;
         sb.append(start).append(" ");
-        for (int i = 1; i <= N; i++) {
-            if (map[start][i] != 1) continue;
-            if (isVisited[i]) continue;
-            DFS(i);
+        for (int next : edges[start]) {
+            if (isVisited[next]) continue;
+            DFS(next);
         }
     }
 
@@ -152,15 +211,15 @@ public class Main {
         Queue<Integer> que = new LinkedList<>();
         que.add(start);
         isVisited[start] = true;
+        sb.append(start).append(" ");
 
         while (!que.isEmpty()) {
             int now = que.poll();
-            sb.append(now).append(" ");
-            for (int i = 1; i <= N; i++) {
-                if (map[now][i] != 1) continue;
-                if (isVisited[i]) continue;
-                que.add(i);
-                isVisited[i] = true;
+            for (int next : edges[now]) {
+                if (isVisited[next]) continue;
+                que.add(next);
+                sb.append(next).append(" ");
+                isVisited[next] = true;
             }
         }
     }
@@ -172,17 +231,18 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
         V = Integer.parseInt(st.nextToken());
 
-        map = new int[N + 1][N + 1];
+        edges = new ArrayList[N + 1];
         isVisited = new boolean[N + 1];
 
+        for (int i = 0; i <= N; i++) edges[i] = new ArrayList<>();
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
-
-            map[start][end] = 1;
-            map[end][start] = 1;
+            edges[start].add(end);
+            edges[end].add(start);
         }
+        for (int i = 0; i <= N; i++) Collections.sort(edges[i]);
         DFS(V);
         sb.append('\n');
         isVisited = new boolean[N + 1];
