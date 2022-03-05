@@ -57,7 +57,6 @@ public class Main {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-
         depth = new int[M];
         backTracking(1, 0);
         System.out.print(sb);
