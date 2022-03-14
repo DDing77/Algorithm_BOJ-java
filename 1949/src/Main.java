@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public class Main {
     static int N;
@@ -23,6 +22,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
+
         town = new int[N + 1];
         dp = new int[N + 1][2];
         adj = new ArrayList[N + 1];
