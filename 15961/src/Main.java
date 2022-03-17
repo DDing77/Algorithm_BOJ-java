@@ -10,26 +10,50 @@ public class Main {
     static int max = Integer.MIN_VALUE;
     static boolean isExist = false;
     static ArrayList<Integer> list = new ArrayList<>();
+
     static void twoPointer() {
         int L = 0;
-        int R = N-1;
+        int R = 0;
         int length = 0;
-        while(L < N ) {
-            if(length < k) {
-                if(list.contains(arr[R])) {
-                    list.remove(0);
-                    L++;
-                    list.add(arr[R]);
-                } else {
+        int cnt = 0;
+        while (L < N) {
+            if (length < k) {
+                if (list.contains(arr[R])) {
                     list.add(arr[R]);
                     R++;
                     length++;
+                } else if(!list.contains(arr[R])){
+                    list.add(arr[R]);
+                    R++;
+                    cnt++;
+                    length++;
+                    max = Math.max(max,cnt);
+                    if (list.size() == k && !list.contains(c)) cnt += 1;
                 }
+
+            } else {
+//                System.out.println(list + ", " + cnt);
+                int temp = list.remove(0);
+                if(!list.contains(temp)) {
+                    cnt--;
+//                    System.out.println("test , " + cnt);
+                }
+                L++;
+                if (list.contains(arr[R % N])) {
+                    list.add(arr[R % N]);
+                    R++;
+                } else {
+                    list.add(arr[R % N]);
+                    cnt++;
+                    R++;
+                }
+                max = Math.max(max, cnt);
+
             }
-
-
+            if (!list.contains(c)) max = Math.max(max, cnt + 1);
         }
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -39,8 +63,9 @@ public class Main {
         c = Integer.parseInt(st.nextToken());
 
         arr = new int[N];
-        for(int i=0; i<N; i++) arr[i] = Integer.parseInt(br.readLine());
+        for (int i = 0; i < N; i++) arr[i] = Integer.parseInt(br.readLine());
 
-
+        twoPointer();
+        System.out.println(max);
     }
 }
