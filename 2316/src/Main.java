@@ -17,28 +17,40 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         P = Integer.parseInt(st.nextToken());
 
-        capacity = new int[N + 1][N + 1];
-        flow = new int[N + 1][N + 1];
-        parent = new int[N + 1];
-        adj = new ArrayList[N + 1];
+        capacity = new int[801][801];
+        flow = new int[801][801];
+        parent = new int[801];
+        adj = new ArrayList[801];
 
-        for (int i = 0; i <= N; i++) adj[i] = new ArrayList<>();
+        for (int i = 0; i <= 800; i++) adj[i] = new ArrayList<>();
+
+        for (int i = 3; i <= 400; i++) {
+            capacity[i][i + 400] = 1;
+
+            adj[i].add(i + 400);
+            adj[400 + i].add(i);
+        }
+
+
         for (int i = 0; i < P; i++) {
             st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
 
-            adj[start].add(end);
-            adj[end].add(start);
+            adj[start + 400].add(end);
+            adj[end].add(start + 400);
+            adj[end + 400].add(start);
+            adj[start].add(end + 400);
 
-            capacity[start][end] = 1;
-            capacity[end][start] = 1;
+            capacity[start + 400][end] = 1;
+            capacity[end + 400][start] = 1;
         }
+
         Queue<Integer> que;
         while (true) {
             que = new LinkedList<>();
             Arrays.fill(parent, -1);
-            que.add(1);
+            que.add(401);
 
             while (!que.isEmpty()) {
                 int now = que.poll();
@@ -53,7 +65,7 @@ public class Main {
 
             if (parent[2] == -1) break;
 
-            for (int i = 2; i != 1; i = parent[i]) {
+            for (int i = 2; i != 401; i = parent[i]) {
                 flow[parent[i]][i] += 1;
                 flow[i][parent[i]] -= 1;
             }
