@@ -104,9 +104,9 @@ public class Main {
 
         Arrays.sort(ranks);
 
-//        for(int i=0; i<=N; i++) {
-//            System.out.println(ranks[i].x + ", " + ranks[i].y + ", " + ranks[i].z);
-//        }
+        for(int i=0; i<=N; i++) {
+            System.out.println(ranks[i].x + ", " + ranks[i].y + ", " + ranks[i].z);
+        }
 
         int ans = 0;
         for (int i = 1; i <= N; i++) {
