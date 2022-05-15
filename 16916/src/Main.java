@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class Main {
     static String S;
@@ -23,6 +24,7 @@ public class Main {
 
     static boolean KMP() {
         makeTable();
+        System.out.println(Arrays.toString(table));
         int j = 0;
         for (int i = 0; i < S.length(); i++) {
             while (j > 0 && S.charAt(i) != P.charAt(j)) {
@@ -47,6 +49,6 @@ public class Main {
 
         if (KMP()) System.out.println(1);
         else System.out.println(0);
-
+        System.out.println(Arrays.toString(table));
     }
 }
