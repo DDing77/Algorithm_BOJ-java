@@ -1,29 +1,16 @@
-import java.io.BufferedReader;
+import java.io.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     static int L;
-    static String pattern;
-    static int[] pi;
-    static void failureFunction() {
-        pi = new int[pattern.length()];
-        int j=0;
-        for(int i=1; i<pattern.length(); i++) {
-            while(j >0 && pattern.charAt(i) != pattern.charAt(j)) {
-                j = pi[j-1];
-            }
-            if( pattern.charAt(i) == pattern.charAt(j)) {
-                pi[i] = ++j;
-            }
-        }
-    }
+    static String S;
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        L = Integer.parseInt(br.readLine());
-        pattern = br.readLine();
-        failureFunction();
-        System.out.println(L - pi[pattern.length()-1]);
+        BufferedReader br  = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int v1 = Integer.parseInt(st.nextToken());
+        int v2 = Integer.parseInt(st.nextToken());
+
+        System.out.println(v1 - v2);
     }
 }
