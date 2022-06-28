@@ -15,15 +15,15 @@ public class Main {
         aScore = 0;
         bScore = 0;
 
-        for(int i=0; i<input.length(); i +=2) {
-            if(input.charAt(i) == 'A') {
-                aScore += Integer.parseInt(String.valueOf(input.charAt(i+1)));
-            }else {
-                bScore += Integer.parseInt(String.valueOf(input.charAt(i+1)));
+        for (int i = 0; i < input.length(); i += 2) {
+            if (input.charAt(i) == 'A') {
+                aScore += Integer.parseInt(String.valueOf(input.charAt(i + 1)));
+            } else {
+                bScore += Integer.parseInt(String.valueOf(input.charAt(i + 1)));
             }
         }
 
-       if( aScore> bScore) System.out.println("A");
-       else System.out.println("B");
+        if (aScore > bScore) System.out.println("A");
+        else System.out.println("B");
     }
 }
