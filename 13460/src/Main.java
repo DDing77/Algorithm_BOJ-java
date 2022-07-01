@@ -1,70 +1,88 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
+
+    static class Coordinate {
+        int redX;
+        int redY;
+        int blueX;
+        int blueY;
+        int cnt;
+
+        public Coordinate(int redX, int redY, int blueX, int blueY, int cnt) {
+            this.redX = redX;
+            this.redY = redY;
+            this.blueX = blueX;
+            this.blueY = blueY;
+            this.cnt = cnt;
+        }
+    }
+
     static int N, M;
+
     static char[][] map;
-    static int[][] score;
+    static boolean[][][][] isVisited;
+    static int min = Integer.MAX_VALUE;
     static int[][] dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-    static void solution() {
-        int RX = 0;
-        int RY = 0;
-        int BX = 0;
-        int BY = 0;
-        for(int i=0; i<N; i++) {
-            for(int j=0; j<M; j++) {
-                if(map[i][j] == 'R'){
-                    RX = i;
-                    RY = j;
-                }
-                if(map[i][j] == 'B'){
-                    BX = i;
-                    BY = j;
-                }
-            }
-        }
-//        System.out.println(RX +" "+ RY);
-//        System.out.println(BX+ " " + BY);
-        Queue<Integer> red = new LinkedList<>();
-        Queue<Integer> blue = new LinkedList<>();
-        red.add(RX);
-        red.add(RY);
-        score[RX][RY] = 1;
-        blue.add(BX);
-        blue.add(BY);
-        while(!red.isEmpty()) {
-            int x = red.poll();
-            int y = red.poll();
-            boolean flag = false;
-            for(int k=0; k<4; k++) {
-                int nx = x;
-                int ny = y;
-                while(true) {
-                    nx += dir[k][0];
-                    ny += dir[k][1];
+    static void bfs(Coordinate ball) {
+        Queue<Coordinate> que = new LinkedList<>();
+        que.add(ball);
+        isVisited[ball.redX][ball.redY][ball.blueX][ball.blueY] = true;
+
+        while (!que.isEmpty()) {
+            Coordinate curBall = que.poll();
+            int curCnt = curBall.cnt;
+
+            if (curCnt >= 10) return;
+            for (int k = 0; k < 4; k++) {
+                int newRedX = curBall.redX;
+                int newRedY = curBall.redY;
+                int newBlueX = curBall.blueX;
+                int newBlueY = curBall.blueY;
+
+                //빨간 구슬 이동
+                while (map[newRedX + dir[k][0]][newRedY + dir[k][1]] != '#') {
+                    newRedX += dir[k][0];
+                    newRedY += dir[k][1];
+                    if (map[newRedX][newRedY] == 'O') break;
                 }
 
-                if(map[nx][ny] == '#' || map[nx][ny] == 'B') continue;
-                if(map[nx][ny] == 'O' ) {
-                    System.out.println(score[x][y]);
-                    break;
+                while (map[newBlueX + dir[k][0]][newBlueY + dir[k][1]] != '#') {
+                    newBlueX += dir[k][0];
+                    newBlueY += dir[k][1];
+                    if (map[newBlueX][newBlueY] == 'O') break;
                 }
-                score[nx][ny] = score[x][y];
-                while(true){
-                    nx += dir[k][0];
-                    ny += dir[k][0];
-                    if(nx == '#' || ny == 'B') break;
-                    if(map[nx][ny] == 'O' ) {
-                        System.out.println(score[x][y]);
-                        break;
+
+                if (map[newBlueX][newBlueY] == 'O') continue;
+
+                if (map[newRedX][newRedY] == 'O') {
+                    min = Math.min(min, curCnt + 1);
+                    return;
+                }
+
+                // 빨간 파랑 만났을 때
+                if (newRedX == newBlueX && newRedY == newBlueY && map[newRedX][newRedY] != 'O') {
+                    int redDistance = Math.abs(newRedX - curBall.redX) + Math.abs(newRedY - curBall.redY);
+                    int blueDistance = Math.abs(newBlueX - curBall.blueX) + Math.abs(newBlueY - curBall.blueY);
+
+                    if (redDistance > blueDistance) {
+                        newRedX -= dir[k][0];
+                        newRedY -= dir[k][1];
+                    } else {
+                        newBlueX -= dir[k][0];
+                        newBlueY -= dir[k][1];
                     }
-                    score[nx][ny] = score[x][y];
+                }
+
+                if (!isVisited[newRedX][newRedY][newBlueX][newBlueY]) {
+                    isVisited[newRedX][newRedY][newBlueX][newBlueY] = true;
+                    que.add(new Coordinate(newRedX, newRedY, newBlueX, newBlueY, curCnt + 1));
                 }
             }
         }
@@ -76,13 +94,23 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         map = new char[N][M];
-        score = new int[N][M];
+        isVisited = new boolean[N][M][N][M];
+
+        int redX = 0, redY = 0, blueX = 0, blueY = 0;
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
             map[i] = str.toCharArray();
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 'R') {
+                    redX = i;
+                    redY = j;
+                } else if (map[i][j] == 'B') {
+                    blueX = i;
+                    blueY = j;
+                }
+            }
         }
-//        for(int i=0; i<N; i++) System.out.println(Arrays.toString(map[i]));
-
-        solution();
+        bfs(new Coordinate(redX, redY, blueX, blueY, 0));
+        System.out.println(min == Integer.MAX_VALUE ? -1 : min);
     }
 }
