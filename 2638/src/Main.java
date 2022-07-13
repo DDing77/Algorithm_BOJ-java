@@ -21,7 +21,6 @@ public class Main {
     // 내부 : 0
     // 치즈 : 1
     // 외부 : 2
-    // 변경 : 3
     static int N, M;
     static int cheeseCnt;
     static int res;
