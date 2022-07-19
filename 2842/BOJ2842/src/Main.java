@@ -98,7 +98,7 @@ public class Main {
         int maxIdx = heightList.size();
         int minIdx = heightList.indexOf(min);
 
-        while (start <= minIdx && start <= end && end <= maxIdx) {
+        while (start <= minIdx && start <= end && end < maxIdx) {
             int left = heightList.get(start);
             int right = heightList.get(end);
 
