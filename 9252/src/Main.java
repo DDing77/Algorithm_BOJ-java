@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public class Main {
     static String A, B;
@@ -12,9 +9,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
+
         A = br.readLine();
         B = br.readLine();
+
         dp = new int[A.length() + 1][B.length() + 1];
+
         for (int i = 1; i <= A.length(); i++) {
             for (int j = 1; j <= B.length(); j++) {
                 if (A.charAt(i-1) == B.charAt(j-1)) {
