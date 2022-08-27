@@ -65,15 +65,31 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
         N = Long.parseLong(br.readLine());
         res = new ArrayList<>();
-
+        if (N == 1) {
+            System.out.println(1);
+            return;
+        }
         pr(N);
 
         Collections.sort(res);
-        for (int i = 0; i < res.size(); i++) sb.append(res.get(i)).append('\n');
-        System.out.print(sb);
+
+        if (res.size() > 0) {
+            long pre = res.get(0);
+            int cnt = 0;
+            int ans = 1;
+            for (long i : res) {
+                if (i == pre) cnt++;
+                else {
+                    ans *= (cnt + 1);
+                    cnt = 1;
+                    pre = i;
+                }
+            }
+            ans *= (cnt + 1);
+            System.out.println(ans);
+        }
     }
 }
