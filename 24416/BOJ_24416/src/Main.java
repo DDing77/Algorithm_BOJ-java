@@ -25,6 +25,5 @@ public class Main {
         recursive(n);
 
         System.out.println(recurCnt + " " + (n - 2));
-
     }
 }
