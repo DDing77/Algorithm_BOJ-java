@@ -24,5 +24,6 @@ public class Main {
             sb.append('\n');
         }
         System.out.print(sb);
+        System.out.println(37 * 9 * 5000);
     }
 }
