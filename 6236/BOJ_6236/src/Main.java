@@ -45,7 +45,7 @@ public class Main {
             }
 
             if (temp != 0) cnt++;
-            
+
             if (cnt <= M) {
                 right = mid - 1;
             } else {
