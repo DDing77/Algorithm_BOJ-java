@@ -26,7 +26,7 @@ public class Main {
             b = Integer.parseInt(st.nextToken());
 
             int gcd = getGcd(a, b);
-            sb.append((a / gcd) * b).append('\n');
+            sb.append((long) a * b / gcd).append('\n');
         }
         System.out.print(sb);
     }
