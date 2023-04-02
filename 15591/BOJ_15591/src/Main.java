@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    public class Edge {
+     private class Edge {
         int to;
         int weight;
 
