@@ -4,16 +4,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    private class Info {
-        int nodeNum;
-        int passCnt;
-
-        public Info(int nodeNum, int passCnt) {
-            this.nodeNum = nodeNum;
-            this.passCnt = passCnt;
-        }
-    }
-
     private int N, M, K, X;
     private ArrayList<Integer>[] edges;
     private int cnt;
@@ -22,22 +12,23 @@ public class Main {
     public void getResult() {
         distance[X] = 0;
 
-        Queue<Info> que = new LinkedList<>();
-        que.add(new Info(X, 0));
+        Queue<Integer> que = new LinkedList<>();
+        que.add(X);
 
         while (!que.isEmpty()) {
-            Info cur = que.poll();
+            int cur = que.poll();
 
-            for (int next : edges[cur.nodeNum]) {
+            for (int next : edges[cur]) {
                 if (distance[next] == -1) {
-                    if (cur.passCnt + 1 == K) {
-                        distance[next] = cur.passCnt + 1;
+                    if (distance[cur] + 1 == K) {
+                        distance[next] = distance[cur] + 1;
                         cnt++;
                         continue;
                     }
 
-                    que.add(new Info(next, cur.passCnt + 1));
-                    distance[next] = cur.passCnt + 1;
+                    que.add(next);
+                    distance[next] = distance[cur] + 1;
+
                 }
             }
         }
