@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/* author : DDing77 */
+
 public class Main {
     private final int[][] dirOdd = {{-1, -1}, {-1, 0}, {0, 1}, {1, 0}, {1, -1}, {0, -1}};
     private final int[][] dirEven = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {0, -1}};
@@ -34,7 +36,6 @@ public class Main {
                     nX = curX + dirEven[k][0];
                     nY = curY + dirEven[k][1];
                 }
-
 
                 if (nX < 0 || nX >= N || nY < 0 || nY >= M) {
                     continue;
