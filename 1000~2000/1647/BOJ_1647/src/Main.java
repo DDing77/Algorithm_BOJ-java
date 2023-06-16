@@ -6,24 +6,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static class Edge implements Comparable<Edge> {
-        int from;
-        int to;
-        int weight;
-
-        public Edge(int from, int to, int weight) {
-            this.from = from;
-            this.to = to;
-            this.weight = weight;
-        }
-
-
-        @Override
-        public int compareTo(Edge o) {
-            return this.weight - o.weight;
-        }
-    }
-
     static Edge[] edges;
     static int[] parent;
     static int N, M;
@@ -72,16 +54,36 @@ public class Main {
         Arrays.sort(edges);
 
         res = 0;
+        int last = 0;
         int cnt = 0;
         for (int i = 0; i < M; i++) {
             if (union(edges[i].from, edges[i].to)) {
-                cnt++;
                 res += edges[i].weight;
+                last = edges[i].weight;
+
+                if (++cnt == N - 1) {
+                    break;
+                }
             }
-            if (cnt == N - 2) break;
         }
 
+        System.out.println(res - last);
+    }
 
-        System.out.println(res);
+    static class Edge implements Comparable<Edge> {
+        int from;
+        int to;
+        int weight;
+
+        public Edge(int from, int to, int weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.weight - o.weight;
+        }
     }
 }
