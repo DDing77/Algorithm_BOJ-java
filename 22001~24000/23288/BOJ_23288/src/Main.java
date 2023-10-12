@@ -6,6 +6,11 @@ import java.util.HashMap;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * BOJ_23288
+ * author_devteo77
+ */
+
 public class Main {
 
     final int[][] dir = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
