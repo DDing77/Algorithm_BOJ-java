@@ -11,7 +11,7 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         N = Integer.parseInt(br.readLine());
 
-        int sum = N * (1 + N) / 2;
+        int sum = N * (1 + N) / 2;`
 
         int three = 0;
         for (int i = 1; i <= N; i++) {
