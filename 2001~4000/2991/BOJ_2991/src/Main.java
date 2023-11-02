@@ -24,15 +24,14 @@ public class Main {
             int time = Integer.parseInt(st.nextToken());
             int cnt = 0;
 
-            time %= (A + B);
-            if (time % (A + B) <= A ) {
+            if (time % (A + B) <= A && time % (A + B) > 0) {
                 cnt++;
             }
-            System.out.println("cnt = " + cnt);
-            if (time % (C + D) <= C) {
+
+            if (time % (C + D) <= C && time % (C + D) > 0) {
                 cnt++;
             }
-            System.out.println(cnt);
+
             sb.append(cnt).append('\n');
         }
         System.out.print(sb);
