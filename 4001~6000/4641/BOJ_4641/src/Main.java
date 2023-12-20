@@ -1,48 +1,49 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
-
-    boolean[] numbers;
-    int res;
-
-    private void solution() throws IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         StringTokenizer st;
 
-        while (true) {
-            String input = br.readLine();
-            if (input.equals("-1")) {
+
+
+        // 입력 받기
+        int N = Integer.parseInt(br.readLine());
+        int[] occurrences = new int[N * 2 - 1];
+
+        // 빈도수 계산
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N * 2 - 1; i++) {
+            occurrences[i] = Integer.parseInt(st.nextToken());
+        }
+
+        // 정렬
+        Arrays.sort(occurrences);
+
+        // 결과 출력
+        int count = 0;
+        for (int i = 0; i < N * 2 - 1; i++) {
+            if (i % 2 == 0) {
+                sb.append(occurrences[i]).append(" ");
+                count++;
+            }
+
+            if (count == N) {
                 break;
             }
-
-            numbers = new boolean[201];
-
-            st = new StringTokenizer(input);
-            while (st.hasMoreTokens()) {
-                numbers[Integer.parseInt(st.nextToken())] = true;
-            }
-
-            res = 0;
-            st = new StringTokenizer(input);
-            while (st.hasMoreTokens()) {
-                int cur = Integer.parseInt(st.nextToken());
-                if (cur == 0) {
-                    break;
-                }
-                if (numbers[cur * 2]) {
-                    res++;
-                }
-            }
-            sb.append(res).append("\n");
         }
-        System.out.print(sb);
-    }
 
-    public static void main(String[] args) throws IOException {
-        new Main().solution();
+        if (count < N) {
+            System.out.println("-1");
+            return;
+        }
+
+        System.out.println(sb);
     }
 }
