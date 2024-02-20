@@ -30,7 +30,7 @@ fileName=`basename $filePath`
 echo fileName = $fileName
 
 # Generate commit message
-commitMessageTitle=$fileName
+commitMessageTitle=$(echo $dirPath | cut -d '\' -f 3)
 commitMessageBody="commit-time: `date`"
 commitMessage="$commitMessageTitle"$'\n'"$commitMessageBody"
 echo commitMessage = $commitMessage
