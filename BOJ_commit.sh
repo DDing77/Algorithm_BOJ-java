@@ -39,6 +39,6 @@ echo commitMessage = $commitMessage
 cd $dirPath
 git add $fileName
 git commit -m "$commitMessage"
-git push origin main
+git push origin master
 
 echo "===== BOJ_commit.sh end ====="
