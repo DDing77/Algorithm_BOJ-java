@@ -21,8 +21,7 @@ public class Main {
             }
         }
 
-        return isPalindrome(left, (left + right + 1) / 2 - 1)
-                && isPalindrome((left + right) / 2 + 1, right);
+        return isPalindrome(left, (left + right + 1) / 2 - 1);
     }
 
     private void solution() throws IOException {
