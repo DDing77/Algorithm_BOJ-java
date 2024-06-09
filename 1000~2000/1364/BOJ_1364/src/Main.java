@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
 
@@ -9,36 +8,22 @@ public class Main {
     public static final StringBuilder sb = new StringBuilder();
 
     private int N;
-    private long[] dp;
-
+    private long res;
+    
     private void solution() throws IOException {
 
         N = Integer.parseInt(br.readLine());
-        if (N < 6) {
-            System.out.println(N);
-            return;
-        }
+        res = 1L;
 
-        dp = new long[N + 1];
-        long plus = 1L;
-        for (int i = 1; i <= 5; i++) {
-            dp[i] = dp[i - 1] + plus;
-        }
+        for (int i = 2; i <= N; i++) {
+            res += i / 6 + 1;
 
-        for (int i = 6; i <= N; i++) {
-            if (i % 6 == 0) {
-                dp[i] = dp[i - 1] + (plus + 1);
-            } else if (i % 6 == 1) {
-                dp[i] = dp[i - 1] + plus;
-            } else if (i % 6 == 2) {
-                plus++;
-                dp[i] = dp[i - 1] + plus;
-            } else {
-                dp[i] = dp[i - 1] + plus;
+            if(i % 6 == 1) {
+                res--;
             }
         }
 
-        System.out.println(dp[N]);
+        System.out.println(res);
     }
 
     public static void main(String[] args) throws IOException {
