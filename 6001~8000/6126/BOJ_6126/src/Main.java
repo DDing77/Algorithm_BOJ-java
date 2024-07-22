@@ -12,8 +12,7 @@ public class Main {
 
     private int N;
     private int V;
-    private int[] coins;
-    private long[][] dp;
+    private long[] dp;
 
     private void solution() throws IOException {
 
@@ -21,29 +20,16 @@ public class Main {
         V = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
 
-        int length = 0;
-        coins = new int[V + 1];
+        dp = new long[N + 1];
+        dp[0] = 1;
         for (int i = 1; i <= V; i++) {
-            coins[i] = Integer.parseInt(br.readLine());
-            if (coins[i] <= N) {
-                length++;
-            }
-        }
-        Arrays.sort(coins);
-
-        dp = new long[V + 1][N + 1];
-        for (int i = 1; i <= length; i++) {
-            dp[i][coins[i]] = 1;
-            for (int j = 1; j <= N; j++) {
-                if (j - coins[i] >= 0) {
-                    dp[i][j] += dp[i][j - coins[i]] + dp[i - 1][j];
-                } else {
-                    dp[i][j] = dp[i - 1][j];
-                }
+            int coin = Integer.parseInt(br.readLine());
+            for (int j = coin; j <= N; j++) {
+                dp[j] += dp[j - coin];
             }
         }
 
-        System.out.println(dp[length][N]);
+        System.out.println(dp[N]);
     }
 
     public static void main(String[] args) throws IOException {
