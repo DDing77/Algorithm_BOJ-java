@@ -6,15 +6,31 @@ import java.util.*;
 public class Main {
 
     public static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static final StringBuilder sb = new StringBuilder();
     public static StringTokenizer st;
 
     private static final int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     private int N;
     private int M;
-    private int[][] board;
+    private int[][] board
     private boolean[][] isVisited;
     private int res;
+
+    private void rotateBoard() {
+        int[][] tempBoard = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                tempBoard[i][j] = board[j][N - i - 1];
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                board[i][j] = tempBoard[i][j];
+            }
+        }
+    }
 
     private BlockGroup execBFS(int x, int y) {
         int rainbowBlockCount = 0;
@@ -22,7 +38,7 @@ public class Main {
         List<int[]> rainbowBlock = new ArrayList<>();
 
         Queue<int[]> que = new ArrayDeque<>();
-        que.add(new int[]{x, y});
+        que.add(new int[]{x, y, 1});
         log.add(new int[]{x, y});
         isVisited[x][y] = true;
 
@@ -33,18 +49,24 @@ public class Main {
                 int nX = cur[0] + dir[0];
                 int nY = cur[1] + dir[1];
 
-                if (nX < 0 || nX >= N || nY < 0 || nY >= N) continue;
-                if (isVisited[nX][nY]) continue;
-                if (board[nX][nY] == -1) continue;
+                if (nX < 0 || nX >= N || nY < 0 || nY >= N) {
+                    continue;
+                }
+                if (isVisited[nX][nY]) {
+                    continue;
+                }
+                if (board[nX][nY] == -1) {
+                    continue;
+                }
 
                 if (board[nX][nY] == 0) {
                     rainbowBlockCount++;
                     rainbowBlock.add(new int[]{nX, nY});
-                    que.add(new int[]{nX, nY});
+                    que.add(new int[]{nX, nY, cur[2] + 1});
                     log.add(new int[]{nX, nY});
                     isVisited[nX][nY] = true;
                 } else if (board[nX][nY] == board[x][y]) {
-                    que.add(new int[]{nX, nY});
+                    que.add(new int[]{nX, nY, cur[2] + 1});
                     log.add(new int[]{nX, nY});
                     isVisited[nX][nY] = true;
                 }
@@ -54,30 +76,16 @@ public class Main {
         for (int[] coordi : rainbowBlock) {
             isVisited[coordi[0]][coordi[1]] = false;
         }
-
-        int standardX = N;
-        int standardY = N;
-        for (int[] block : log) {
-            int bx = block[0];
-            int by = block[1];
-            if (board[bx][by] != 0) {
-                if (bx < standardX || (bx == standardX && by < standardY)) {
-                    standardX = bx;
-                    standardY = by;
-                }
-            }
-        }
-
-        return new BlockGroup(standardX, standardY, board[x][y], rainbowBlockCount, log);
+        return new BlockGroup(x, y, board[x][y], rainbowBlockCount, log);
     }
 
     private List<BlockGroup> findBlockGroup() {
         List<BlockGroup> blockGroups = new ArrayList<>();
-        isVisited = new boolean[N][N];
 
+        isVisited = new boolean[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (board[i][j] > 0 && !isVisited[i][j]) {
+                if (!isVisited[i][j] && board[i][j] > 0) {
                     BlockGroup blockGroup = execBFS(i, j);
 
                     if (blockGroup.blocks.size() > 1) {
@@ -87,6 +95,7 @@ public class Main {
             }
         }
 
+        Collections.sort(blockGroups);
         return blockGroups;
     }
 
@@ -102,9 +111,7 @@ public class Main {
             for (int i = N - 2; i >= 0; i--) {
                 if (board[i][j] >= 0) {
                     int curX = i;
-                    while (true) {
-                        if (curX + 1 >= N) break;
-                        if (board[curX + 1][j] != -2) break;
+                    while (curX + 1 < N && board[curX + 1][j] == -2) {
                         curX++;
                     }
                     if (i != curX) {
@@ -114,16 +121,6 @@ public class Main {
                 }
             }
         }
-    }
-
-    private void rotateBoard() {
-        int[][] tempBoard = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                tempBoard[i][j] = board[j][N - i - 1];
-            }
-        }
-        board = tempBoard;
     }
 
     private void solution() throws IOException {
@@ -142,12 +139,13 @@ public class Main {
         while (true) {
             List<BlockGroup> blockGroupList = findBlockGroup();
 
-            if (blockGroupList.isEmpty()) break;
+            if (blockGroupList.isEmpty()) {
+                break;
+            }
 
-            Collections.sort(blockGroupList);
             BlockGroup blockGroup = blockGroupList.get(0);
-
-            res += removeBlockGroup(blockGroup);
+            int score = removeBlockGroup(blockGroup);
+            res += score;
 
             downBlock();
             rotateBoard();
@@ -158,12 +156,17 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        new Main().solution();
+        Main main = new Main();
+        main.solution();
     }
 
     static class BlockGroup implements Comparable<BlockGroup> {
-        int startX, startY, color, rainbowBlockCount;
-        List<int[]> blocks;
+
+        int startX;
+        int startY;
+        int color;
+        int rainbowBlockCount = 0;
+        List<int[]> blocks = new ArrayList<>();
 
         public BlockGroup(int startX, int startY, int color, int rainbowBlockCount, List<int[]> blocks) {
             this.startX = startX;
@@ -175,16 +178,16 @@ public class Main {
 
         @Override
         public int compareTo(BlockGroup o) {
-            if (this.blocks.size() != o.blocks.size()) {
-                return o.blocks.size() - this.blocks.size();
-            }
-            if (this.rainbowBlockCount != o.rainbowBlockCount) {
+            if (this.blocks.size() == o.blocks.size()) {
+                if (this.rainbowBlockCount == o.rainbowBlockCount) {
+                    if (this.startX == o.startX) {
+                        return o.startY - this.startY;
+                    }
+                    return o.startX - this.startX;
+                }
                 return o.rainbowBlockCount - this.rainbowBlockCount;
             }
-            if (this.startX != o.startX) {
-                return o.startX - this.startX;
-            }
-            return o.startY - this.startY;
+            return o.blocks.size() - this.blocks.size();
         }
     }
 }
