@@ -29,7 +29,7 @@ fun main() {
         }
 
         for (i in wordList.indices) {
-            for (j in i..<wordList.size) {
+            for (j in i..<wordList. size) {
                 if (wordList[i] != wordList[j]) {
                     wordList[j] = check(wordList[i], wordList[j])
                 }
