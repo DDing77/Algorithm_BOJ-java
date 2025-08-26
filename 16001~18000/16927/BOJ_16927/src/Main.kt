@@ -6,51 +6,58 @@ import kotlin.math.min
 fun main() {
     BufferedReader(InputStreamReader(System.`in`)).use { br ->
         val (N, M, R) = br.readLine().split(" ").map { it.toInt() }
-
-        val board = Array(N) { IntArray(M) }
-        val depth = min(N, M) / 2
-
-        for (i in 0..<N) {
+        val a = Array(N) { IntArray(M) }
+        for (i in 0 until N) {
             val st = StringTokenizer(br.readLine())
-            for (j in 0..<M) {
-                board[i][j] = st.nextToken().toInt()
-            }
+            for (j in 0 until M) a[i][j] = st.nextToken().toInt()
         }
 
-        var rowEnd = N
-        var colEnd = M
-        var rowWidth = N
-        var colWidth = M
-        for (i in 0..<depth) {
-            val repeatCount = R % (rowWidth * 2 + colWidth * 2 - 4)
-            repeat(repeatCount) {
-                val temp = board[i][i]
-                // 상단
-                for (j in i..<colEnd - 1) {
-                    board[i][j] = board[i][j + 1]
-                }
-                // 우측
-                for (j in i..<rowEnd - 1) {
-                    board[j][colEnd - 1] = board[j + 1][colEnd - 1]
-                }
-                // 하단
-                for (j in (colEnd - 1) downTo i + 1)
-                    board[rowEnd - 1][j] = board[rowEnd - 1][j - 1]
-                // 좌측
-                for (j in rowEnd - 1 downTo i + 1) {
-                    board[j][i] = board[j - 1][i]
-                }
-                board[i + 1][i] = temp
+        val depth = min(N, M) / 2
+
+        for (layer in 0 until depth) {
+            val top = layer
+            val left = layer
+            val bottom = N - 1 - layer
+            val right = M - 1 - layer
+
+            val height = bottom - top
+            val width  = right - left
+            val L = 2 * (height + width)
+            if (L == 0) continue
+
+            val k = (R % L).toInt()
+
+            val rr = IntArray(L)
+            val cc = IntArray(L)
+            var p = 0
+
+            for (c in left until right) {
+                rr[p] = top; cc[p] = c; p++
             }
-            rowEnd--
-            colEnd--
-            rowWidth -= 2
-            colWidth -= 2
+            for (r in top until bottom) {
+                rr[p] = r; cc[p] = right; p++
+            }
+            for (c in right downTo left + 1) {
+                rr[p] = bottom; cc[p] = c; p++
+            }
+            for (r in bottom downTo top + 1) {
+                rr[p] = r; cc[p] = left; p++
+            }
+
+            val vals = IntArray(L) { idx -> a[rr[idx]][cc[idx]] }
+
+            for (i in 0 until L) {
+                a[rr[i]][cc[i]] = vals[(i + k) % L]
+            }
         }
 
         val sb = StringBuilder()
-        for (arr in board) {
-            sb.append(arr.joinToString(" ")).append("\n")
+        for (i in 0 until N) {
+            for (j in 0 until M) {
+                if (j > 0) sb.append(' ')
+                sb.append(a[i][j])
+            }
+            sb.append('\n')
         }
         print(sb)
     }
